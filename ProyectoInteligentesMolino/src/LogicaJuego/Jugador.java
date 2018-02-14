@@ -23,8 +23,8 @@ public abstract class Jugador implements Serializable {
         this();
         if (jugador != Ficha.JUGADOR_1 && jugador != Ficha.JUGADOR_2) {
             try {
-                throw new JuegoException("" + getClass().getName() + " - ficha invalida del jugador: " + jugador);
-            } catch (JuegoException ex) {
+                throw new Exception("" + getClass().getName() + " - ficha invalida del jugador: " + jugador);
+            } catch (Exception ex) {
                 Logger.getLogger(Jugador.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
@@ -84,5 +84,5 @@ public abstract class Jugador implements Serializable {
 
     public abstract int getIndiceParaQuitarFichaDeOponente(Tablero tableroJuego);
 
-    public abstract Movimiento getFichaAMover(Tablero tableroJuego, int faseDelJuego) throws JuegoException;
+    public abstract Movimiento getFichaAMover(Tablero tableroJuego);
 }

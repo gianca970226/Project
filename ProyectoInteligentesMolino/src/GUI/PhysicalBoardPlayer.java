@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,26 +25,23 @@ public class PhysicalBoardPlayer extends javax.swing.JFrame {
     PanelPlayer panel;
     int from = -1;
     int to = -1;
-    int faseAnterior;
 
     JTextField consola2;
 
     public PhysicalBoardPlayer() {
         initComponents();
-        faseAnterior = 1;
 
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         IniciarTablero();
         setSize(423, 500);
-        consola2= new JTextField("");
+        consola2 = new JTextField("");
         consola2.setSize(423, 50);
-        consola2.setLocation(0,423);
+        consola2.setLocation(0, 423);
         consola2.setBackground(Color.BLACK);
         consola2.setForeground(Color.WHITE);
         consola2.setEditable(false);
         add(consola2);
-
 
     }
 
@@ -68,14 +67,14 @@ public class PhysicalBoardPlayer extends javax.swing.JFrame {
         }
     }
 
-    public void ActualizarTablero() throws JuegoException {
+    public void ActualizarTablero() {
         for (int i = 0; i < boardPositions.length; i++) {
             boardPositions[i].cambiarJugador(Player.getJuego().getTableroDelJuego().getPosicionesDelTablero()[i].getJugadorOcupandola());
         }
         repintar();
     }
 
-    public void ActualizarTableroMinimax() throws JuegoException {
+    public void ActualizarTableroMinimax() {
         for (int i = 0; i < boardPositions.length; i++) {
             boardPositions[i].cambiarJugador(PlayerM.getJuego().getTableroDelJuego().getPosicionesDelTablero()[i].getJugadorOcupandola());
         }
@@ -121,7 +120,7 @@ public class PhysicalBoardPlayer extends javax.swing.JFrame {
 
     }
 
-    public void capturarmovimiento(int src, int dest, int remove, int type) throws JuegoException {
+    public void capturarmovimiento(int src, int dest, int remove, int type) {
         switch (type) {
             case Juego.FASE_COLOCAR:
                 boolean movimientoValido = true;
@@ -129,10 +128,8 @@ public class PhysicalBoardPlayer extends javax.swing.JFrame {
                     movimientoValido = Player.getJuego().ponerFichaJugador(dest, Ficha.JUGADOR_1);
                     if (movimientoValido) {
                         if (Player.getJuego().hizoUnMolino(dest, Ficha.JUGADOR_1)) {
-                             consola2.setText("");
+                            consola2.setText("");
                             consola2.setText("HIZO MOLINO!!, ELIMINA UNA FICHA ENEMIGA");
-                            this.faseAnterior = Player.getJuego().getFaseActualDelJuego();
-                            Player.getJuego().setFaseJuego(Juego.FASE_ELIMINAR);
                         } else {
                             System.out.println("ENVIANDO JUEGO AL OPONENTE!!");
                             GuiEvent a = new GuiEvent(this, 1);
@@ -149,14 +146,16 @@ public class PhysicalBoardPlayer extends javax.swing.JFrame {
             case Juego.FASE_VUELO:
                 if (Player.getLocalName().equals("Player_1")) {
                     int esValido = -1;
-                    esValido = Player.getJuego().moverFichaDe(src, dest, Ficha.JUGADOR_1);
+                    try {
+                        esValido = Player.getJuego().moverFichaDe(src, dest, Ficha.JUGADOR_1);
+                    } catch (Exception ex) {
+                        Logger.getLogger(PhysicalBoardPlayer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     if (esValido == 0) {
                         if (Player.getJuego().hizoUnMolino(dest, Ficha.JUGADOR_1)) {
-                            
+
                             consola2.setText("");
                             consola2.setText("HIZO MOLINO!!, ELIMINA UNA FICHA ENEMIGA");
-                            this.faseAnterior = Player.getJuego().getFaseActualDelJuego();
-                            Player.getJuego().setFaseJuego(Juego.FASE_ELIMINAR);
                         } else {
                             GuiEvent a = new GuiEvent(this, 1);
                             Player.Event(a);
@@ -182,7 +181,6 @@ public class PhysicalBoardPlayer extends javax.swing.JFrame {
                     consola2.setText("");
                     consola2.setText("SE ELIMINO LA FICHA:" + remove);
                     GuiEvent a = new GuiEvent(this, 1);
-                    Player.getJuego().setFaseJuego(this.faseAnterior);
                     Player.Event(a);
                     Player.getJuego().setMiTurno(false);
                 } else {

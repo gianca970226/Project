@@ -2,6 +2,8 @@ package LogicaJuego;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JugadorIAMinimax extends Jugador implements Serializable {
 
@@ -14,10 +16,10 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
     
     
     //contructor del jugador
-    public JugadorIAMinimax(Ficha jugador, int numeroFichasPorJugador, int profundidad) throws JuegoException {
+    public JugadorIAMinimax(Ficha jugador, int numeroFichasPorJugador, int profundidad) throws Exception {
         super(jugador, numeroFichasPorJugador);
         if (profundidad < 1) {
-            throw new JuegoException("" + getClass().getName() + " - profundidad invalidad para el jugador minimax");
+            throw new Exception("" + getClass().getName() + " - profundidad invalidad para el jugador minimax");
         }
         this.profundidad = profundidad;
         oponente = jugador == Ficha.JUGADOR_1 ? Ficha.JUGADOR_2 : Ficha.JUGADOR_1;
@@ -26,44 +28,52 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
     
     
     //metodo con el cual se aplica un movimiento
-    private void aplicarMovimiento(Movimiento movimiento, Ficha jugador, Tablero tableroJuego, int faseJuego) throws JuegoException {
-        Posicion posicion = tableroJuego.getPosicion(movimiento.indiceDestino);
-        posicion.setJugadorOcupando(jugador);
-        if (faseJuego == Juego.FASE_COLOCAR) {
-            tableroJuego.incremetarNumeroFichasJugador(jugador);
-        } else {
-            tableroJuego.getPosicion(movimiento.indiceOrigen).QuitarFicha();
-        }
-
-        if (movimiento.eliminarFichaEnIndice != -1) {
-            Posicion eliminar = tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice);
-            eliminar.QuitarFicha();
-            tableroJuego.decrementarNumeroFichasJugador(getFichaOponente(jugador));
+    private void aplicarMovimiento(Movimiento movimiento, Ficha jugador, Tablero tableroJuego, int faseJuego) {
+        try {
+            Posicion posicion = tableroJuego.getPosicion(movimiento.indiceDestino);
+            posicion.setJugadorOcupando(jugador);
+            if (faseJuego == Juego.FASE_COLOCAR) {
+                tableroJuego.incremetarNumeroFichasJugador(jugador);
+            } else {
+                tableroJuego.getPosicion(movimiento.indiceOrigen).QuitarFicha();
+            }
+            
+            if (movimiento.eliminarFichaEnIndice != -1) {
+                Posicion eliminar = tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice);
+                eliminar.QuitarFicha();
+                tableroJuego.decrementarNumeroFichasJugador(getFichaOponente(jugador));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(JugadorIAMinimax.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     //metodo que deshace un movimiento hecho
-    private void desHacerMovimiento(Movimiento movimiento, Ficha jugador, Tablero tableroJuego, int faseJuego) throws JuegoException {
+    private void desHacerMovimiento(Movimiento movimiento, Ficha jugador, Tablero tableroJuego, int faseJuego) {
         
-        //deshace el movimiento
-        Posicion posicion = tableroJuego.getPosicion(movimiento.indiceDestino);
-        posicion.QuitarFicha();
-        
-        //si la fase es de colocar fichas simplementa decrementa la cantidad de 
-        //fichas del jugador
-        if (faseJuego == Juego.FASE_COLOCAR) {
-            tableroJuego.decrementarNumeroFichasJugador(jugador);
-        } else {
+        try {
+            //deshace el movimiento
+            Posicion posicion = tableroJuego.getPosicion(movimiento.indiceDestino);
+            posicion.QuitarFicha();
             
-            //si la fase del juego es movimiento 
-            //tiene que mover la ficha a la posicion original
-            tableroJuego.getPosicion(movimiento.indiceOrigen).setJugadorOcupando(jugador);
-        }
-        //si elimino una ficha en el movimiento tiene que volverla a poner
-        if (movimiento.eliminarFichaEnIndice != -1) {
-            Ficha opp = getFichaOponente(jugador);
-            tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice).setJugadorOcupando(opp);
-            tableroJuego.incremetarNumeroFichasJugador(opp);
+            //si la fase es de colocar fichas simplementa decrementa la cantidad de
+            //fichas del jugador
+            if (faseJuego == Juego.FASE_COLOCAR) {
+                tableroJuego.decrementarNumeroFichasJugador(jugador);
+            } else {
+                
+                //si la fase del juego es movimiento
+                //tiene que mover la ficha a la posicion original
+                tableroJuego.getPosicion(movimiento.indiceOrigen).setJugadorOcupando(jugador);
+            }
+            //si elimino una ficha en el movimiento tiene que volverla a poner
+            if (movimiento.eliminarFichaEnIndice != -1) {
+                Ficha opp = getFichaOponente(jugador);
+                tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice).setJugadorOcupando(opp);
+                tableroJuego.incremetarNumeroFichasJugador(opp);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(JugadorIAMinimax.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -86,84 +96,14 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
             List<Movimiento> movimientos = generarMovimientos(tableroJuego, this.fichaJugador, Juego.FASE_COLOCAR);
             for (Movimiento movimiento : movimientos) {
                 this.aplicarMovimiento(movimiento, fichaJugador, tableroJuego, Juego.FASE_COLOCAR);
-                movimiento.puntaje = alphaBeta(oponente, tableroJuego, profundidad - 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
                 desHacerMovimiento(movimiento, fichaJugador, tableroJuego, Juego.FASE_COLOCAR);
             }
-
-            Collections.sort(movimientos, new HeuristicaComparacionMax());
-
-            List<Movimiento> mejoresMovimientos = new ArrayList<>();
-            int mejorPuntaje = movimientos.get(0).puntaje;
-            mejoresMovimientos.add(movimientos.get(0));
-
-            for (int i = 1; i < movimientos.size(); i++) {
-                if (movimientos.get(i).puntaje == mejorPuntaje) {
-                    mejoresMovimientos.add(movimientos.get(i));
-                } else {
-                    break;
-                }
-            }
-            this.mejorMovimientoActual = mejoresMovimientos.get(new Random().nextInt(mejoresMovimientos.size()));
+            this.mejorMovimientoActual = movimientos.get(new Random().nextInt(movimientos.size()));
             return mejorMovimientoActual.indiceDestino;
-        } catch (JuegoException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
-        return -1;
-    }
-
-    private int alphaBeta(Ficha jugador, Tablero tableroJuego, int profundidad, int alpha, int beta) {
-
-        int juegoTerminado;
-        List<Movimiento> movHijos;
-
-        try {
-            int faseJuego = getFaseJuego(tableroJuego, jugador);
-
-            if (profundidad == 0) {
-                return evaluar(tableroJuego, faseJuego);
-            } else if ((juegoTerminado = verificarJuegoTerminado(tableroJuego)) != 0) {
-                return juegoTerminado;
-            } else if ((movHijos = generarMovimientos(tableroJuego, jugador, faseJuego)).isEmpty()) {
-                if (jugador == fichaJugador) { 
-                    return -maxPuntaje;
-                } else {
-                    return maxPuntaje;
-                }
-            } else {
-                for (Movimiento move : movHijos) {
-
-                    aplicarMovimiento(move, jugador, tableroJuego, faseJuego);
-
-                    if (jugador == fichaJugador) {  // maximizar jugador
-                        alpha = Math.max(alpha, alphaBeta(oponente, tableroJuego, profundidad - 1, alpha, beta));
-
-                        if (beta <= alpha) {
-                            desHacerMovimiento(move, jugador, tableroJuego, faseJuego);
-                            break; // podar
-                        }
-                    } else {  //  minimizar jugador
-                        beta = Math.min(beta, alphaBeta(fichaJugador, tableroJuego, profundidad - 1, alpha, beta));
-                        if (beta <= alpha) {
-                            desHacerMovimiento(move, jugador, tableroJuego, faseJuego);;
-                            break; // podar
-                        }
-                    }
-                    desHacerMovimiento(move, jugador, tableroJuego, faseJuego);;
-                }
-
-                if (jugador == fichaJugador) {
-                    return alpha;
-                } else {
-                    return beta;
-                }
-            }
-
-        } catch (JuegoException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-
         return -1;
     }
 
@@ -177,7 +117,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
                 } else {
                     return 0;
                 }
-            } catch (JuegoException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -195,7 +135,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
                 }
             }
 
-        } catch (JuegoException e) {
+        } catch (Exception e) {
             e.printStackTrace();;
             System.exit(-1);
         }
@@ -206,7 +146,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
     
     //metodo que genera unos posibles movimientos de un jugador
     //a partir de un estado del tablero y una fase del juego
-    private List<Movimiento> generarMovimientos(Tablero tableroJuego, Ficha jugador, int faseJuego) throws JuegoException {
+    private List<Movimiento> generarMovimientos(Tablero tableroJuego, Ficha jugador, int faseJuego) {
         //creo la lista donde voy a guardar los movimientos posibles
         List<Movimiento> movimientos = new ArrayList<>();
         //variables de posicion temporales para manejarlas
@@ -320,7 +260,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
                 }
 
             }
-        } catch (JuegoException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
@@ -330,51 +270,47 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
             //itero por todos los movimientos añadidos arriba
             for (Movimiento movimiento : movimientos) {
                 
-                Ficha jugadorEliminado = Ficha.SIN_JUGADOR;
+                try {
+                    Ficha jugadorEliminado = Ficha.SIN_JUGADOR;
+                    
+                    posicion = tableroJuego.getPosicion(movimiento.indiceDestino);
+                    
+                    //intenta el movimiento para hacer un analisis del puntajes del movimiento
+                    posicion.setJugadorOcupando(jugador);
+                    
+                    if (faseJuego == Juego.FASE_COLOCAR) {
+                        tableroJuego.incremetarNumeroFichasJugador(jugador);
+                    } else {
+                        tableroJuego.getPosicion(movimiento.indiceOrigen).QuitarFicha();
+                    }
+                    
+                    if (movimiento.eliminarFichaEnIndice != -1) {
+                        Posicion eliminada = tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice);
+                        jugadorEliminado = eliminada.getJugadorOcupandola();
+                        eliminada.QuitarFicha();
+                        tableroJuego.decrementarNumeroFichasJugador(jugadorEliminado);
+                    }
+                    
 
-                posicion = tableroJuego.getPosicion(movimiento.indiceDestino);
-                
-                //intenta el movimiento para hacer un analisis del puntajes del movimiento
-                posicion.setJugadorOcupando(jugador);
-
-                if (faseJuego == Juego.FASE_COLOCAR) {
-                    tableroJuego.incremetarNumeroFichasJugador(jugador);
-                } else {
-                    tableroJuego.getPosicion(movimiento.indiceOrigen).QuitarFicha();
+                    
+                    //deshace todos los movimientos hechos para el analisis
+                    posicion.QuitarFicha();
+                    
+                    if (faseJuego == Juego.FASE_COLOCAR) {
+                        tableroJuego.decrementarNumeroFichasJugador(jugador);
+                    } else {
+                        tableroJuego.getPosicion(movimiento.indiceOrigen).setJugadorOcupando(jugador);
+                    }
+                    
+                    if (movimiento.eliminarFichaEnIndice != -1) {
+                        
+                        tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice).setJugadorOcupando(jugadorEliminado);
+                        tableroJuego.incremetarNumeroFichasJugador(jugadorEliminado);
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(JugadorIAMinimax.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                if (movimiento.eliminarFichaEnIndice != -1) {
-                    Posicion eliminada = tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice);
-                    jugadorEliminado = eliminada.getJugadorOcupandola();
-                    eliminada.QuitarFicha();
-                    tableroJuego.decrementarNumeroFichasJugador(jugadorEliminado);
-                }
-                
-                //evalua el movimiento dandole un puntaje
-                movimiento.puntaje = evaluar(tableroJuego, faseJuego);
-                
-                //deshace todos los movimientos hechos para el analisis
-                posicion.QuitarFicha();
-
-                if (faseJuego == Juego.FASE_COLOCAR) {
-                    tableroJuego.decrementarNumeroFichasJugador(jugador);
-                } else {
-                    tableroJuego.getPosicion(movimiento.indiceOrigen).setJugadorOcupando(jugador);
-                }
-
-                if (movimiento.eliminarFichaEnIndice != -1) {
-
-                    tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice).setJugadorOcupando(jugadorEliminado);
-                    tableroJuego.incremetarNumeroFichasJugador(jugadorEliminado);
-                }
-
-            }
-            //si el jugador es el jugadro actual ordena en orden a la mejor ganancia
-            if (jugador == fichaJugador) {
-                Collections.sort(movimientos, new HeuristicaComparacionMax());
-            } else {
-                //sino ordena a la menor perdida
-                Collections.sort(movimientos, new HeuristicaComparacionMin());
             }
         }
         //actualiza el numero de movimientos
@@ -383,131 +319,6 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
         return movimientos;
     }
 
-    
-    
-    
-    //metodo que utilizo para evaluar el puntaje de un estado del tablero en una fase del mismo juego
-    private int evaluar(Tablero tableroJuego, int faseJuego) throws JuegoException {
-        //variable donde guardare el puntaje
-        int puntaje = 0;
-         
-        //variables para contar cuantos molinos tiene el jugador y el oponente
-        int R1_numeroMolinosJugador = 0, R1_numeroMolinosOponente = 0;
-        //varialbes para contar cuantas posisbles configuraciones de 2 fichas tiene el jugador y el oponente
-        int R2_numeroConfiguracionDosFichasJugador = 0, R2_numeroConfiguracionDosFichasOponente = 0;
-        
-        
-        //itero por todas las posibles conminaciones de molino
-        for (int i = 0; i < Tablero.NUM_COMBINACIONES_MOLINO; i++) {
-            
-            int fichasJugador = 0, posicionesVacias = 0, fichasOponente = 0;
-
-            try {
-                
-                Posicion fila[] = tableroJuego.getCombinacionMolino(i);
-                for (int j = 0; j < Tablero.NUM_POSICIONES_EN_CADA_MOLINO; j++) {
-                    if (fila[j].getJugadorOcupandola() == fichaJugador) {
-                        fichasJugador++;
-                    } else if (fila[j].getJugadorOcupandola() == Ficha.SIN_JUGADOR) {
-                        posicionesVacias++;
-                    } else {
-                        fichasOponente++;
-                    }
-                }
-            } catch (JuegoException e) {
-                e.printStackTrace();
-            }
-
-            if (fichasJugador == 3) {
-                R1_numeroMolinosJugador++;
-            } else if (fichasJugador == 2 && posicionesVacias == 1) {
-                R2_numeroConfiguracionDosFichasJugador++;
-            } else if (fichasJugador == 1 && posicionesVacias == 2) {
-                puntaje += 1;
-            } else if (fichasOponente == 3) {
-                R1_numeroMolinosOponente++;
-            } else if (fichasOponente == 2 && posicionesVacias == 1) {
-                R2_numeroConfiguracionDosFichasOponente++;
-            } else if (fichasOponente == 1 && posicionesVacias == 2) {
-                puntaje += -1;
-            }
-
-            Ficha jugadorEnPosicion = tableroJuego.getPosicion(i).getJugadorOcupandola();
-            
-            if (i == 4 || i == 10 || i == 13 || i == 19) {
-                if (jugadorEnPosicion == fichaJugador) {
-                    puntaje += 2;
-                } else if (jugadorEnPosicion != Ficha.SIN_JUGADOR) {
-                    puntaje -= 2;
-                }
-            } else if (i == 1 || i == 9 || i == 14 || i == 22
-                    || i == 7 || i == 11 || i == 12 || i == 16) {
-                if (jugadorEnPosicion == fichaJugador) {
-                    puntaje += 1;
-                } else if (jugadorEnPosicion != Ficha.SIN_JUGADOR) {
-                    puntaje -= 1;
-                }
-            }
-            
-            
-        }
-
-        int coef;
-
-        if (faseJuego == Juego.FASE_COLOCAR) {
-            coef = 80;
-        } else if (faseJuego == Juego.FASE_MOVIMIENTO) {
-            coef = 120;
-        } else {
-            coef = 180;
-        }
-
-        puntaje += coef * R1_numeroMolinosJugador;
-        puntaje -= coef * R1_numeroMolinosOponente;
-
-        if (faseJuego == Juego.FASE_COLOCAR) {
-            coef = 10;
-        } else if (faseJuego == Juego.FASE_MOVIMIENTO) {
-            coef = 8;
-        } else {
-            coef = 6;
-        }
-        puntaje += coef * tableroJuego.getNumeroFichasJugador(fichaJugador);
-        puntaje -= coef * tableroJuego.getNumeroFichasJugador(oponente);
-
-        // number of 2 pieces and 1 free spot configuration
-        if (faseJuego == Juego.FASE_COLOCAR) {
-            coef = 12;
-        } else {
-            coef = 10;
-        }
-        puntaje += coef * R2_numeroConfiguracionDosFichasJugador;
-        puntaje -= coef * R2_numeroConfiguracionDosFichasOponente;
-
-        if (faseJuego == Juego.FASE_COLOCAR) {
-            coef = 10;
-        } else {
-            coef = 25;
-        }
-
-        return puntaje;
-    }
-
-    private class HeuristicaComparacionMax implements Comparator<Movimiento> {
-
-        @Override
-        public int compare(Movimiento m1, Movimiento m2) {
-            return m2.puntaje - m1.puntaje;
-        }
-    }
-
-    private class HeuristicaComparacionMin implements Comparator<Movimiento> {
-
-        @Override
-        public int compare(Movimiento m1, Movimiento m2) {
-            return m1.puntaje - m2.puntaje;
-        }
-    }
 
     @Override
     public int getIndiceParaQuitarFichaDeOponente(Tablero tableroJuego) {
@@ -515,7 +326,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
     }
 
     @Override
-    public Movimiento getFichaAMover(Tablero tableroJuego, int faseDelJuego) throws JuegoException {
+    public Movimiento getFichaAMover(Tablero tableroJuego) {
         numeroMovimientos = 0;
         movimientosQueEliminan = 0;
 
@@ -523,32 +334,15 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
             List<Movimiento> movimientos = generarMovimientos(tableroJuego, this.fichaJugador, getFaseJuego(tableroJuego,fichaJugador));
             for (Movimiento movimiento : movimientos) {
                 this.aplicarMovimiento(movimiento, fichaJugador, tableroJuego, Juego.FASE_COLOCAR);
-                movimiento.puntaje = alphaBeta(oponente, tableroJuego, profundidad - 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
                 desHacerMovimiento(movimiento, fichaJugador, tableroJuego, Juego.FASE_COLOCAR);
             }
-
-            Collections.sort(movimientos, new HeuristicaComparacionMax());
-             List<Movimiento> mejoresMovimientos = new ArrayList<>();
-            int mejorPuntaje = movimientos.get(0).puntaje;
-            mejoresMovimientos.add(movimientos.get(0));
-
-            for (int i = 1; i < movimientos.size(); i++) {
-                if (movimientos.get(i).puntaje == mejorPuntaje) {
-                    mejoresMovimientos.add(movimientos.get(i));
-                } else {
-                    break;
-                }
-            }
-            this.mejorMovimientoActual = mejoresMovimientos.get(new Random().nextInt(mejoresMovimientos.size()));
+            this.mejorMovimientoActual = movimientos.get(new Random().nextInt(movimientos.size()));
             return mejorMovimientoActual;
             
-            
-        } catch (JuegoException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
-        
-        
         return null;
     }
 
@@ -558,7 +352,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
     //y me guarda los movimientos en los cuales puedo eliminar una
     //ficha del enemigo
     //y si no hace molino solo guarda el movimiento
-    private void mirarMovimiento(Tablero tableroJuego, Ficha jugador, List<Movimiento> movimientos, Movimiento movimiento) throws JuegoException {
+    private void mirarMovimiento(Tablero tableroJuego, Ficha jugador, List<Movimiento> movimientos, Movimiento movimiento) throws Exception {
         boolean hizoMolino = false;// variable para saber si el jugador con ese movimiento hace molino 
         
         //tenemos que iterar por todas las posibles formas de hacer molino

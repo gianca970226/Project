@@ -1,6 +1,8 @@
 package LogicaJuego;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Juego implements Serializable {
 
@@ -59,7 +61,7 @@ public class Juego implements Serializable {
     public Ficha getJugadorEnPosicionDelTablero(int posicionTablero) {
         try {
             return this.tableroJuego.getPosicion(posicionTablero).getJugadorOcupandola();
-        } catch (JuegoException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
@@ -67,13 +69,13 @@ public class Juego implements Serializable {
     }
 
     //metodo que me dice si una posicion del tablero esta disponible
-    public boolean estaDisponiblePosicion(int indiceTablero) throws JuegoException {
+    public boolean estaDisponiblePosicion(int indiceTablero) throws Exception {
         return this.tableroJuego.posicionEstaDisponible(indiceTablero);
     }
 
     //metodo que me dice si un movimiento de una ficha
     // es valido
-    public boolean movimientoValido(int indicePosicionActual, int indiceSiguientePosicion) throws JuegoException {
+    public boolean movimientoValido(int indicePosicionActual, int indiceSiguientePosicion) throws Exception {
         Posicion posicionActual = this.tableroJuego.getPosicion(indicePosicionActual);
         //en caso de que las posiciones sean adyacentes y la posicion siguiente
         //no este ocupada el movimiento es valido
@@ -84,7 +86,7 @@ public class Juego implements Serializable {
     }
 
     //metodo utilizado en la fase del juego de moviemiento de fechas en el cual se mueve una ficha de una posicion a otra
-    public int moverFichaDe(int indiceInicial, int indiceDestino, Ficha jugador) throws JuegoException {
+    public int moverFichaDe(int indiceInicial, int indiceDestino, Ficha jugador) throws Exception {
         if (posicionTieneFichaDeJugador(indiceInicial, jugador)) {
             if (estaDisponiblePosicion(indiceDestino)) {
                 if (movimientoValido(indiceInicial, indiceDestino) || (this.tableroJuego.getNumeroFichasJugador(jugador) == Juego.NUMERO_MINIMO_FICHAS + 1)) {
@@ -103,41 +105,55 @@ public class Juego implements Serializable {
     }
 
     //metodo que me dice si en una determinada posicion hay una ficha de un determinado jugador
-    public boolean posicionTieneFichaDeJugador(int indiceTablero, Ficha jugador) throws JuegoException {
-        return (this.tableroJuego.getPosicion(indiceTablero).getJugadorOcupandola() == jugador);
+    public boolean posicionTieneFichaDeJugador(int indiceTablero, Ficha jugador) {
+        try {
+            return (this.tableroJuego.getPosicion(indiceTablero).getJugadorOcupandola() == jugador);
+        } catch (Exception ex) {
+            Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     //metodo utilizado en la fase de poner fichas, pone un ficha de un jugador en una posicion determinada
     //si es posible
-    public boolean ponerFichaJugador(int indiceTablero, Ficha jugador) throws JuegoException {
-        if (this.tableroJuego.posicionEstaDisponible(indiceTablero)) {
-            tableroJuego.getPosicion(indiceTablero).setJugadorOcupando(jugador);
-            tableroJuego.incremetarNumeroFichasJugador(jugador);
-            if (tableroJuego.incremetarPiezasColocadasTablero() == (Juego.NUMERO_FICHAS_POR_JUGADOR * 2)) {
-                this.faseJuego = Juego.FASE_MOVIMIENTO;
+    public boolean ponerFichaJugador(int indiceTablero, Ficha jugador) {
+        try {
+            if (this.tableroJuego.posicionEstaDisponible(indiceTablero)) {
+                tableroJuego.getPosicion(indiceTablero).setJugadorOcupando(jugador);
+                tableroJuego.incremetarNumeroFichasJugador(jugador);
+                if (tableroJuego.incremetarPiezasColocadasTablero() == (Juego.NUMERO_FICHAS_POR_JUGADOR * 2)) {
+                    this.faseJuego = Juego.FASE_MOVIMIENTO;
+                }
+                return true;
             }
-            return true;
+            return false;
+        } catch (Exception ex) {
+            Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
     //metodo que me dice si al poner una ficha el jugador hizo un molino
-    public boolean hizoUnMolino(int indiceDestino, Ficha jugador) throws JuegoException {
+    public boolean hizoUnMolino(int indiceDestino, Ficha jugador) {
         int numeroMaximoDeFichasdelJugadorEnFila = 0;
         boolean encontroMolino = false;//esta linea es adicional puede ser eliminada si daña el funcionamiento
         for (int i = 0; i < Tablero.NUM_COMBINACIONES_MOLINO && !encontroMolino; i++) {
-            Posicion[] fila = this.tableroJuego.getCombinacionMolino(i);
-            for (int j = 0; j < Tablero.NUM_POSICIONES_EN_CADA_MOLINO && !encontroMolino; j++) {
-                if (fila[j].getIndicePosicion() == indiceDestino) {
-                    int fichasJugadorEnEstaFila = numeroDeFichasDelJugadorEnFila(fila, jugador);
-                    if (fichasJugadorEnEstaFila > numeroMaximoDeFichasdelJugadorEnFila) {
-                        numeroMaximoDeFichasdelJugadorEnFila = fichasJugadorEnEstaFila;
+            try {
+                Posicion[] fila = this.tableroJuego.getCombinacionMolino(i);
+                for (int j = 0; j < Tablero.NUM_POSICIONES_EN_CADA_MOLINO && !encontroMolino; j++) {
+                    if (fila[j].getIndicePosicion() == indiceDestino) {
+                        int fichasJugadorEnEstaFila = numeroDeFichasDelJugadorEnFila(fila, jugador);
+                        if (fichasJugadorEnEstaFila > numeroMaximoDeFichasdelJugadorEnFila) {
+                            numeroMaximoDeFichasdelJugadorEnFila = fichasJugadorEnEstaFila;
+                        }
+                        if (numeroMaximoDeFichasdelJugadorEnFila == Tablero.NUM_POSICIONES_EN_CADA_MOLINO) {
+                            encontroMolino = true;
+                        }
                     }
-                    if (numeroMaximoDeFichasdelJugadorEnFila == Tablero.NUM_POSICIONES_EN_CADA_MOLINO) {
-                        encontroMolino = true;
-                    }
-                }
 
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return encontroMolino;
@@ -162,15 +178,20 @@ public class Juego implements Serializable {
     }
 
     //metodo que quita una ficha del tablero de un jugador si es posible
-    public boolean quitarFicha(int indiceTablero, Ficha jugador) throws JuegoException {
-        if (!this.tableroJuego.posicionEstaDisponible(indiceTablero) && this.posicionTieneFichaDeJugador(indiceTablero, jugador)) {
-            this.tableroJuego.getPosicion(indiceTablero).QuitarFicha();
-            this.tableroJuego.decrementarNumeroFichasJugador(jugador);
-            if (this.faseJuego == Juego.FASE_MOVIMIENTO && this.tableroJuego.getNumeroFichasJugador(jugador) == Juego.NUMERO_MINIMO_FICHAS + 1) {
-                this.faseJuego = Juego.FASE_VUELO;
-                System.out.println("fase del juego es la fase:" + this.faseJuego);
+    public boolean quitarFicha(int indiceTablero, Ficha jugador) {
+        try {
+            if (!this.tableroJuego.posicionEstaDisponible(indiceTablero) && this.posicionTieneFichaDeJugador(indiceTablero, jugador)) {
+                this.tableroJuego.getPosicion(indiceTablero).QuitarFicha();
+                this.tableroJuego.decrementarNumeroFichasJugador(jugador);
+                if (this.faseJuego == Juego.FASE_MOVIMIENTO && this.tableroJuego.getNumeroFichasJugador(jugador) == Juego.NUMERO_MINIMO_FICHAS + 1) {
+                    this.faseJuego = Juego.FASE_VUELO;
+                    System.out.println("fase del juego es la fase:" + this.faseJuego);
+                }
+                return true;
             }
-            return true;
+            return false;
+        } catch (Exception ex) {
+            Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -209,49 +230,54 @@ public class Juego implements Serializable {
                     }
                 }
             }
-        } catch (JuegoException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
         return true;
     }
 
-    public int quienGano() throws JuegoException {
-        if (this.tableroJuego.getNumeroFichasJugador(Ficha.JUGADOR_1) == Juego.NUMERO_MINIMO_FICHAS) {
-            return 1;
-        } else if (this.tableroJuego.getNumeroFichasJugador(Ficha.JUGADOR_2) == Juego.NUMERO_MINIMO_FICHAS) {
-            return 2;
-        } else {
-             boolean j1TieneMovValido = false, j2TieneMovValido = false;
-             Ficha jugador;
-            for (int i = 0; i < Tablero.NUM_POSICIONES_DEL_TABLERO; i++) {
-                Posicion posicion = tableroJuego.getPosicion(i);
-                if ((jugador = posicion.getJugadorOcupandola()) != Ficha.SIN_JUGADOR) {
-                    int[] adjacent = posicion.getIndicesPosicionesAdjacentes();
-                    for (int j = 0; j < adjacent.length; j++) {
-                        Posicion adjacentPos = tableroJuego.getPosicion(adjacent[j]);
-                        if (!adjacentPos.estaOcupado()) {
-                            if (!j1TieneMovValido) { // cambio si la variable es false
-                                j1TieneMovValido = (jugador == Ficha.JUGADOR_1);
+    public int quienGano() {
+        try {
+            if (this.tableroJuego.getNumeroFichasJugador(Ficha.JUGADOR_1) == Juego.NUMERO_MINIMO_FICHAS) {
+                return 1;
+            } else if (this.tableroJuego.getNumeroFichasJugador(Ficha.JUGADOR_2) == Juego.NUMERO_MINIMO_FICHAS) {
+                return 2;
+            } else {
+                boolean j1TieneMovValido = false, j2TieneMovValido = false;
+                Ficha jugador;
+                for (int i = 0; i < Tablero.NUM_POSICIONES_DEL_TABLERO; i++) {
+                    Posicion posicion = tableroJuego.getPosicion(i);
+                    if ((jugador = posicion.getJugadorOcupandola()) != Ficha.SIN_JUGADOR) {
+                        int[] adjacent = posicion.getIndicesPosicionesAdjacentes();
+                        for (int j = 0; j < adjacent.length; j++) {
+                            Posicion adjacentPos = tableroJuego.getPosicion(adjacent[j]);
+                            if (!adjacentPos.estaOcupado()) {
+                                if (!j1TieneMovValido) { // cambio si la variable es false
+                                    j1TieneMovValido = (jugador == Ficha.JUGADOR_1);
+                                }
+                                if (!j2TieneMovValido) {
+                                    j2TieneMovValido = (jugador == Ficha.JUGADOR_2);
+                                }
+                                break;
                             }
-                            if (!j2TieneMovValido) {
-                                j2TieneMovValido = (jugador == Ficha.JUGADOR_2);
-                            }
-                            break;
                         }
                     }
                 }
-            }
-            
-            if(!j1TieneMovValido && !j2TieneMovValido){
+                
+                if(!j1TieneMovValido && !j2TieneMovValido){
+                    return 0;
+                }else
+                    if(!j1TieneMovValido){
+                        return 1;
+                    }else if(!j2TieneMovValido){
+                        return 2;
+                    }
                 return 0;
-            }else
-            if(!j1TieneMovValido){
-                return 1;
-            }else if(!j2TieneMovValido){
-                return 2;
             }
-            return 0;
+        } catch (Exception ex) {
+            Logger.getLogger(Juego.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return 0;
     }
 }

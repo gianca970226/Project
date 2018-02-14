@@ -56,5 +56,4 @@ public class Panel extends JPanel {
         ImageIcon Img = new ImageIcon(getClass().getResource(Ruta_fondo));
         g.drawImage(Img.getImage(), 0, 0, null);
     }
-
 }

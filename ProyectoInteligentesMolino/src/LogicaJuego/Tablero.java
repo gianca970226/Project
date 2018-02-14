@@ -52,34 +52,34 @@ public class Tablero implements Serializable {
     }
 
     //metodo que devuelve una posicion del tablero
-    public Posicion getPosicion(int indice) throws JuegoException {
+    public Posicion getPosicion(int indice) throws Exception {
         if (indice >= 0 && indice < Tablero.NUM_POSICIONES_DEL_TABLERO) {
             return posicionesDelTablero[indice];
         } else {
-            throw new JuegoException("" + getClass().getName() + " - indice invalido:" + indice);
+            throw new Exception("" + getClass().getName() + " - indice invalido:" + indice);
         }
     }
 
     //metodo que me indica si una posicion esta disponible para
     //poner una ficha
-    public boolean posicionEstaDisponible(int indice) throws JuegoException {
+    public boolean posicionEstaDisponible(int indice) throws Exception {
         if (indice >= 0 && indice < Tablero.NUM_POSICIONES_DEL_TABLERO) {
             return !posicionesDelTablero[indice].estaOcupado();
         } else {
-            throw new JuegoException("" + getClass().getName() + " - indice invalido:" + indice);
+            throw new Exception("" + getClass().getName() + " - indice invalido:" + indice);
         }
     }
 
     //metodo con el cual pongo una ficha en una posicion de un jugador
-    public void setPosicionDeJugador(int indice, Ficha jugador) throws JuegoException {
+    public void setPosicionDeJugador(int indice, Ficha jugador) throws Exception {
         if (indice >= 0 && indice < Tablero.NUM_POSICIONES_DEL_TABLERO) {
             if (jugador == Ficha.JUGADOR_1 || jugador == Ficha.JUGADOR_2) {
                 this.posicionesDelTablero[indice].setJugadorOcupando(jugador);
             } else {
-                throw new JuegoException("" + getClass().getName() + " - ficha invalida: " + jugador);
+                throw new Exception("" + getClass().getName() + " - ficha invalida: " + jugador);
             }
         } else {
-            throw new JuegoException("" + getClass().getName() + " - indice invalido:" + indice);
+            throw new Exception("" + getClass().getName() + " - indice invalido:" + indice);
         }
     }
 
@@ -90,36 +90,36 @@ public class Tablero implements Serializable {
 
     //metodo que incremeta el numero de fichas de un jugador en el tablero
     //y ademas retorna este numero
-    public int incremetarNumeroFichasJugador(Ficha jugador) throws JuegoException {
+    public int incremetarNumeroFichasJugador(Ficha jugador) throws Exception {
         if (jugador == Ficha.JUGADOR_1) {
             return ++this.numeroFichasJ1;
         } else if (jugador == Ficha.JUGADOR_2) {
             return ++this.numeroFichasJ2;
         } else {
-            throw new JuegoException("" + getClass().getName() + " - Ficha de juegador invalida: " + jugador);
+            throw new Exception("" + getClass().getName() + " - Ficha de juegador invalida: " + jugador);
         }
     }
 
     //metodo que decrementa el numero de fichas de un jugador en el 
     //tablero y retorna este numero
-    public int decrementarNumeroFichasJugador(Ficha jugador) throws JuegoException {
+    public int decrementarNumeroFichasJugador(Ficha jugador) throws Exception {
         if (jugador == Ficha.JUGADOR_1) {
             return --this.numeroFichasJ1;
         } else if (jugador == Ficha.JUGADOR_2) {
             return --this.numeroFichasJ2;
         } else {
-            throw new JuegoException("" + getClass().getName() + " - Ficha de juegador invalida: " + jugador);
+            throw new Exception("" + getClass().getName() + " - Ficha de juegador invalida: " + jugador);
         }
     }
 
     //metodo que devuelve el numero de fichas de un jugador en el tablero
-    public int getNumeroFichasJugador(Ficha jugador) throws JuegoException {
+    public int getNumeroFichasJugador(Ficha jugador) throws Exception {
         if (jugador == Ficha.JUGADOR_1) {
             return this.numeroFichasJ1;
         } else if (jugador == Ficha.JUGADOR_2) {
             return this.numeroFichasJ2;
         } else {
-            throw new JuegoException("" + getClass().getName() + " - Ficha de juegador invalida: " + jugador);
+            throw new Exception("" + getClass().getName() + " - Ficha de juegador invalida: " + jugador);
         }
     }
 
@@ -172,11 +172,11 @@ public class Tablero implements Serializable {
     }
 
     //metodo que deuelve una posicion del molino segun un indice
-    public Posicion[] getCombinacionMolino(int indice) throws JuegoException {
+    public Posicion[] getCombinacionMolino(int indice) throws Exception {
         if (indice >= 0 && indice < Tablero.NUM_COMBINACIONES_MOLINO) {
             return this.combinacionesMolino[indice];
         } else {
-            throw new JuegoException("" + getClass().getName() + " - indice invalido:" + indice);
+            throw new Exception("" + getClass().getName() + " - indice invalido:" + indice);
         }
     }
 

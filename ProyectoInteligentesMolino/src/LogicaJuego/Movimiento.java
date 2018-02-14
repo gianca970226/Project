@@ -11,11 +11,10 @@ public class Movimiento implements Serializable {
     
     public int indiceOrigen,indiceDestino,eliminarFichaEnIndice;
     public final int tipoDeMovimiento;
-    public int puntaje;
     
-    public Movimiento(int origen,int destino,int eliminar,int tipo) throws JuegoException{
+    public Movimiento(int origen,int destino,int eliminar,int tipo){
         if(tipo!=COLOCAR && tipo!=MOVER && tipo!=ELIMINAR){
-            throw new JuegoException(getClass().getName()+" - tipo de movimiento invalido");
+            System.out.println("Tipo de movimiento invalido");
         }
         this.indiceOrigen=origen;
         this.indiceDestino=destino;

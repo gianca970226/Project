@@ -56,7 +56,7 @@ public class Agent_Minimax extends Agent {
     public void inicializarJugadorIA(Ficha ficha, int numeroDeFichas, int profundidad) {
         try {
             this.jugadorIA = new JugadorIAMinimax(ficha, numeroDeFichas, profundidad);
-        } catch (JuegoException ex) {
+        } catch (Exception ex) {
             System.out.println("FALLO AL INICIAR JUGADOR MINIMAX");
             ex.printStackTrace();
         }
@@ -119,7 +119,7 @@ public class Agent_Minimax extends Agent {
                     System.out.println("NO SE PUEDE PONER UNA FICHA EN LA POSICICON" + indiceTablero);
                 }
 
-            } catch (JuegoException ex) {
+            } catch (Exception ex) {
                 System.out.println("ERROR AL PONER UNA FICHA EN EL JUGADOR MINIMAX");
                 ex.printStackTrace();
             }
@@ -129,7 +129,7 @@ public class Agent_Minimax extends Agent {
             int indiceOrigen, indiceDestino;
             Movimiento movimiento = null;
             try {
-                movimiento = jugadorIA.getFichaAMover(juego.getTableroDelJuego(), juego.getFaseActualDelJuego());
+                movimiento = jugadorIA.getFichaAMover(juego.getTableroDelJuego());
                 indiceOrigen = movimiento.indiceOrigen;
                 indiceDestino = movimiento.indiceDestino;
 
@@ -151,19 +151,18 @@ public class Agent_Minimax extends Agent {
                 } else {
                     System.out.println("MOVIMIENTO INVALIDO :" + indiceOrigen + " a:" + indiceDestino);
                 }
-            } catch (JuegoException ex) {
+            } catch (Exception ex) {
                 System.out.println("ERROR AL BUSCAR MOVIMIENTO!!");
                 ex.printStackTrace();
             }
         }
 
-        private void hacerMovimiento() throws JuegoException {
+        private void hacerMovimiento() throws Exception {
             if (juego.getFaseActualDelJuego() == Juego.FASE_COLOCAR) {
-                System.out.println("FASE_COLOCAR MINIMAX");
+                System.out.println("FASE_COLOCAR");
                 hacerMovimientoFaseColocar();
             } else if (!juego.finalizoElJuego()) {
                 System.out.println("JUEGO FINALIZADO:" + juego.finalizoElJuego());
-                System.out.println("FASE_MOVIMIENTO MINIMAX");
                 moverFicha();
             } else {
                 int jugador=juego.quienGano();
@@ -220,7 +219,7 @@ public class Agent_Minimax extends Agent {
                         try {
                             getTablero().ActualizarTableroMinimax();
                             hacerMovimiento();
-                        } catch (JuegoException ex) {
+                        } catch (Exception ex) {
                             System.out.println("ERROR AL ACTUALIZAR TABLERO");
                             ex.printStackTrace();
                         }
