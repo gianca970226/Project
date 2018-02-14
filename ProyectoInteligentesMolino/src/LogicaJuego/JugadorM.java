@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class JugadorIAMinimax extends Jugador implements Serializable {
+public class JugadorM extends Jugador implements Serializable {
 
     private int profundidad;//maneja la profundidad del arbol de busqueda del algoritmo minimax
     private Ficha oponente;//el tipo de ficha que maneja el enemigo
@@ -16,7 +16,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
     
     
     //contructor del jugador
-    public JugadorIAMinimax(Ficha jugador, int numeroFichasPorJugador, int profundidad) throws Exception {
+    public JugadorM(Ficha jugador, int numeroFichasPorJugador, int profundidad) throws Exception {
         super(jugador, numeroFichasPorJugador);
         if (profundidad < 1) {
             throw new Exception("" + getClass().getName() + " - profundidad invalidad para el jugador minimax");
@@ -44,7 +44,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
                 tableroJuego.decrementarNumeroFichasJugador(getFichaOponente(jugador));
             }
         } catch (Exception ex) {
-            Logger.getLogger(JugadorIAMinimax.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JugadorM.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -73,7 +73,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
                 tableroJuego.incremetarNumeroFichasJugador(opp);
             }
         } catch (Exception ex) {
-            Logger.getLogger(JugadorIAMinimax.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JugadorM.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -308,7 +308,7 @@ public class JugadorIAMinimax extends Jugador implements Serializable {
                         tableroJuego.incremetarNumeroFichasJugador(jugadorEliminado);
                     }
                 } catch (Exception ex) {
-                    Logger.getLogger(JugadorIAMinimax.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(JugadorM.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }

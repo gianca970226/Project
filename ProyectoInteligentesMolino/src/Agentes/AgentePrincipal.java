@@ -6,23 +6,23 @@
 package Agentes;
 
 import jade.core.ProfileImpl;
-import jade.*;
 import jade.wrapper.ContainerController;
 import jade.core.Runtime;
 import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
 
 /**
  *
  * @author Ander
  */
-public class Agent_Master {
+public class AgentePrincipal {
 
     private static ContainerController containerController;
     Runtime runtime;
     private final ProfileImpl profile;
     AgentController Agente;
 
-    public Agent_Master() {
+    public AgentePrincipal() {
         runtime = Runtime.instance();
         profile = new ProfileImpl();
         profile.setParameter(ProfileImpl.MAIN_HOST, "localhost");
@@ -39,7 +39,7 @@ public class Agent_Master {
         try {
             Agente = containerController.createNewAgent(name, agentClass, args);
             Agente.start();
-        } catch (Exception e) {
+        } catch (StaleProxyException e) {
             System.out.println("error"+e);
         }
     }

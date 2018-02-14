@@ -1,29 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
-
-import LogicaJuego.Ficha;
+import LogicaJuego.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-/**
- *
- * @author Ander
- */
-public class Panel extends JPanel {
+
+public class PanelJugador extends JPanel {
 
     String fondo;
-    
-    
-    public Panel(String fondo) {
+    frmJugador frmJugador;
+    int id = -1;
+
+    public PanelJugador(String fondo, frmJugador frmJugador, int id) {
         this.fondo = fondo;
+        this.frmJugador = frmJugador;
+        this.id = id;
         setBackground(new Color(0f, 0f, 0f, 0f));
+       // addMouseListener(new ListenerPanelPlayer(this.frmJugador,this));
+    }
+
+ 
+
+    public int getId(){
+        return this.id;
     }
 
     public String getFondo() {
@@ -35,9 +36,7 @@ public class Panel extends JPanel {
     }
 
     public void cambiarJugador(Ficha Player) {
-
         if (null == Player) {
-            
             this.fondo = "../Images/Libre.jpg";
         }
         else switch (Player) {
@@ -56,7 +55,9 @@ public class Panel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paintComponent(g);
+        setBackground(new Color(0f, 0f, 0f, 0f));
         ImageIcon Img = new ImageIcon(getClass().getResource(fondo));
         g.drawImage(Img.getImage(), 0, 0, null);
     }
+    
 }

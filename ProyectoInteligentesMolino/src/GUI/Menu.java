@@ -5,7 +5,7 @@
  */
 package GUI;
 
-import Agentes.Agent_Master;
+import Agentes.AgentePrincipal;
 import LogicaJuego.Ficha;
 import LogicaJuego.Juego;
 
@@ -20,14 +20,14 @@ public class Menu extends javax.swing.JFrame {
      */
     
     
-    Agent_Master creador;
+    AgentePrincipal agentePrincipal;
     Object [] argumentos;
     
     
     public Menu() {
         initComponents();
-        creador = new Agent_Master();
-        creador.initController();
+        agentePrincipal = new AgentePrincipal();
+        agentePrincipal.initController();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
@@ -82,14 +82,14 @@ public class Menu extends javax.swing.JFrame {
         argumentos[1]=Juego.NUMERO_FICHAS_POR_JUGADOR;
         argumentos[2]=4;
         argumentos[3]=true;
-        creador.initAgent("Player_1", "Agentes.Agent_Minimax", argumentos);
+        agentePrincipal.initAgent("Jugador1", "Agentes.AgenteJugador", argumentos);
         Object args [] = new Object[4];
         args[0]=Ficha.JUGADOR_2;
         args[1]=Juego.NUMERO_FICHAS_POR_JUGADOR;
         args[2]=4;
         args[3]=false;
-        creador.initAgent("Player_2", "Agentes.Agent_Minimax", args);
-       // creador.initAgent("manager", "Agentes.Agent_Manager", null);
+        agentePrincipal.initAgent("Jugador2", "Agentes.AgenteJugador", args);
+       // agentePrincipal.initAgent("manager", "Agentes.Agent_Manager", null);
         this.setVisible(false);
     }//GEN-LAST:event_AvsaActionPerformed
 
