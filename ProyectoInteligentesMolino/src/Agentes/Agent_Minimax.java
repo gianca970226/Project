@@ -181,6 +181,11 @@ public class Agent_Minimax extends Agent {
         }
 
         private void enviar() {
+                    try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Agent_Minimax.class.getName()).log(Level.SEVERE, null, ex);
+        }
             System.out.println("ENVIANDO RESPUESTA");
             try {
                 AID idReceptor = new AID();
