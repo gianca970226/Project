@@ -135,7 +135,7 @@ public class Menu extends javax.swing.JFrame {
         args[2]=4;
         args[3]=false;
         creador.initAgent("Player_2", "Agentes.Agent_Minimax", args);
-        creador.initAgent("manager", "Agentes.Agent_Manager", null);
+       // creador.initAgent("manager", "Agentes.Agent_Manager", null);
         this.setVisible(false);
     }//GEN-LAST:event_AvsaActionPerformed
 

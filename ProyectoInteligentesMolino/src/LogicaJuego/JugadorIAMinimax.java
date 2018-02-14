@@ -3,7 +3,7 @@ package LogicaJuego;
 import java.io.Serializable;
 import java.util.*;
 
-public class JugadorIAMinimax extends JugadorIA implements Serializable {
+public class JugadorIAMinimax extends Jugador implements Serializable {
 
     private int profundidad;//maneja la profundidad del arbol de busqueda del algoritmo minimax
     private Ficha oponente;//el tipo de ficha que maneja el enemigo
@@ -103,7 +103,7 @@ public class JugadorIAMinimax extends JugadorIA implements Serializable {
                     break;
                 }
             }
-            this.mejorMovimientoActual = mejoresMovimientos.get(aleatorio.nextInt(mejoresMovimientos.size()));
+            this.mejorMovimientoActual = mejoresMovimientos.get(new Random().nextInt(mejoresMovimientos.size()));
             return mejorMovimientoActual.indiceDestino;
         } catch (JuegoException e) {
             e.printStackTrace();
@@ -539,7 +539,7 @@ public class JugadorIAMinimax extends JugadorIA implements Serializable {
                     break;
                 }
             }
-            this.mejorMovimientoActual = mejoresMovimientos.get(aleatorio.nextInt(mejoresMovimientos.size()));
+            this.mejorMovimientoActual = mejoresMovimientos.get(new Random().nextInt(mejoresMovimientos.size()));
             return mejorMovimientoActual;
             
             

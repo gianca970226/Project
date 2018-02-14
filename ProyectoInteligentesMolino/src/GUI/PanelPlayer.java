@@ -18,7 +18,7 @@ public class PanelPlayer extends JPanel {
         this.Tablero = Tablero;
         this.identificador = identificador;
         setBackground(new Color(0f, 0f, 0f, 0f));
-        addMouseListener(new ListenerPanelPlayer(this.Tablero,this));
+       // addMouseListener(new ListenerPanelPlayer(this.Tablero,this));
     }
 
     public void Seleccionar(String Player) {

@@ -7,14 +7,14 @@ import java.util.logging.Logger;
 public abstract class Jugador implements Serializable {
 
     protected String nombre;
-    protected int juegosGanados;
     protected int numeroFichas;
     protected int numeroFichasEnTablero;
     protected Ficha fichaJugador;
     protected boolean poderTerminar;
-
+    public int numeroMovimientos;
+    public int movimientosQueEliminan = 0;
     protected Jugador() {
-        juegosGanados = 0;
+
         numeroFichasEnTablero = 0;
         poderTerminar = false;
     }
@@ -27,8 +27,7 @@ public abstract class Jugador implements Serializable {
             } catch (JuegoException ex) {
                 Logger.getLogger(Jugador.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        else {
+        } else {
             numeroFichas = numeroFichasPorJugador;
             fichaJugador = jugador;
         }
@@ -80,6 +79,10 @@ public abstract class Jugador implements Serializable {
         return poderTerminar;
     }
 
-    public abstract boolean isIA();
+   
+    public abstract int getIndiceParaPonerFicha(Tablero tableroJuego);
 
+    public abstract int getIndiceParaQuitarFichaDeOponente(Tablero tableroJuego);
+
+    public abstract Movimiento getFichaAMover(Tablero tableroJuego, int faseDelJuego) throws JuegoException;
 }

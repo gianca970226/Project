@@ -33,6 +33,11 @@ public class Agent_Minimax extends Agent {
         int profundidad = (int) args[2];
         inicioJuego = (boolean) args[3];
         inicializarJugadorIA(jugador, numeroFichasPorJugador, profundidad);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Agent_Minimax.class.getName()).log(Level.SEVERE, null, ex);
+        }
         addBehaviour(new JugarMolino(inicioJuego));
     }
 
