@@ -41,27 +41,11 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        Hvsa = new javax.swing.JButton();
         Avsa = new javax.swing.JButton();
-        Hvsh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Juego del Molino");
         setBackground(new java.awt.Color(0, 0, 0));
-
-        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel1.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
-        jLabel1.setText("Seleccionar Modo de Juego");
-
-        Hvsa.setBackground(new java.awt.Color(102, 0, 255));
-        Hvsa.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
-        Hvsa.setText("Humano vs Agente");
-        Hvsa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                HvsaActionPerformed(evt);
-            }
-        });
 
         Avsa.setBackground(new java.awt.Color(102, 0, 255));
         Avsa.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
@@ -72,55 +56,25 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        Hvsh.setBackground(new java.awt.Color(102, 0, 255));
-        Hvsh.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
-        Hvsh.setText("Humano vs Humano");
-        Hvsh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                HvshActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Hvsh, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Avsa, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(Hvsa, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addGap(77, 77, 77)
+                .addComponent(Avsa, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(78, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(38, 38, 38)
-                .addComponent(Hvsa, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addGap(126, 126, 126)
                 .addComponent(Avsa, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(Hvsh, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(180, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void HvsaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HvsaActionPerformed
-        argumentos= new Object[4];
-        argumentos[0]=Ficha.JUGADOR_2;
-        argumentos[1]=Juego.NUMERO_FICHAS_POR_JUGADOR;
-        argumentos[2]=4;
-        argumentos[3]=false;
-        creador.initAgent("Player_1", "Agentes.Agent_Player", null);
-        creador.initAgent("Player_2", "Agentes.Agent_Minimax", argumentos);
-        this.setVisible(false);
-    }//GEN-LAST:event_HvsaActionPerformed
 
     private void AvsaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AvsaActionPerformed
         argumentos= new Object[4];
@@ -138,12 +92,6 @@ public class Menu extends javax.swing.JFrame {
        // creador.initAgent("manager", "Agentes.Agent_Manager", null);
         this.setVisible(false);
     }//GEN-LAST:event_AvsaActionPerformed
-
-    private void HvshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HvshActionPerformed
-        creador.initAgent("Player_1", "Agentes.Agent_Player", null);
-        creador.initAgent("Player_2", "Agentes.Agent_Player", null);
-        this.setVisible(false);
-    }//GEN-LAST:event_HvshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,8 +130,5 @@ public class Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Avsa;
-    private javax.swing.JButton Hvsa;
-    private javax.swing.JButton Hvsh;
-    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
