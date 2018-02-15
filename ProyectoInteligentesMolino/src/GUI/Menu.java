@@ -41,42 +41,50 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Avsa = new javax.swing.JButton();
+        asd = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Juego del Molino");
         setBackground(new java.awt.Color(0, 0, 0));
 
-        Avsa.setBackground(new java.awt.Color(102, 0, 255));
-        Avsa.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
-        Avsa.setText("Agente vs Agente");
-        Avsa.addActionListener(new java.awt.event.ActionListener() {
+        asd.setBackground(new java.awt.Color(255, 255, 255));
+        asd.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        asd.setText("Agente 1 vs Agente 2");
+        asd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AvsaActionPerformed(evt);
+                asdActionPerformed(evt);
             }
         });
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fondo.jpg"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(Avsa, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(72, 72, 72)
+                .addComponent(asd, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(126, 126, 126)
-                .addComponent(Avsa, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(asd))
+            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void AvsaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AvsaActionPerformed
+    private void asdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asdActionPerformed
         argumentos= new Object[4];
         argumentos[0]=JugadorC.AGENTE1;
         argumentos[1]=ReglasMolino.NUMERO_FICHAS_POR_JUGADOR;
@@ -89,9 +97,9 @@ public class Menu extends javax.swing.JFrame {
         args[2]=4;
         args[3]=false;
         agentePrincipal.initAgent("Jugador2", "Agentes.AgenteJugador", args);
-       // agentePrincipal.initAgent("manager", "Agentes.Agent_Manager", null);
+        // agentePrincipal.initAgent("manager", "Agentes.Agent_Manager", null);
         this.setVisible(false);
-    }//GEN-LAST:event_AvsaActionPerformed
+    }//GEN-LAST:event_asdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -129,6 +137,8 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Avsa;
+    private javax.swing.JButton asd;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
