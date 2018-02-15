@@ -35,15 +35,15 @@ public class PanelJugador extends JPanel {
         this.fondo = fondo;
     }
 
-    public void cambiarJugador(Ficha Player) {
+    public void cambiarJugador(JugadorC Player) {
         if (null == Player) {
             this.fondo = "../Images/Libre.jpg";
         }
         else switch (Player) {
-            case JUGADOR_1:
+            case AGENTE1:
                 this.fondo = "../Images/Jugador1.jpg";
                 break;
-            case JUGADOR_2:
+            case AGENTE2:
                 this.fondo = "../Images/Jugador2.jpg";
                 break;
             default:

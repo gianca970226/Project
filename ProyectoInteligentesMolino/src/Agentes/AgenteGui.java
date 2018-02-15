@@ -15,13 +15,13 @@ import javax.swing.JOptionPane;
 public class AgenteGui extends GuiAgent {
 
     frmJugador frmJugador;
-    Juego Juego;
+    ReglasMolino Juego;
     CompEnvAct ComportamientoAgente;
     boolean turnoAsginado = true;
 
     @Override
     protected void setup() {
-        this.Juego = new Juego();
+        this.Juego = new ReglasMolino();
         crearTablero(this);
         this.ComportamientoAgente = new CompEnvAct(this);
         this.addBehaviour(ComportamientoAgente);
@@ -47,11 +47,11 @@ public class AgenteGui extends GuiAgent {
         }
     }
 
-    public Juego getJuego() {
+    public ReglasMolino getJuego() {
         return Juego;
     }
 
-    public void setJuego(Juego Juego) {
+    public void setJuego(ReglasMolino Juego) {
 
         this.Juego = Juego;
     }
@@ -83,7 +83,7 @@ class CompEnvAct extends SimpleBehaviour {
         this.Jugador = Player;
     }
 
-    void Enviar(Juego Juego) {
+    void Enviar(ReglasMolino Juego) {
         try {
             AID idReceptor = new AID();
             if (Jugador.getLocalName().equals("Jugador1")) {
@@ -108,7 +108,7 @@ class CompEnvAct extends SimpleBehaviour {
             ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
             if (mensaje != null) {
 
-                Juego Object = (Juego) mensaje.getContentObject();
+                ReglasMolino Object = (ReglasMolino) mensaje.getContentObject();
 
                System.out.println("Turno eviado de:" + mensaje.getSender().getLocalName());
                 Object.getTableroDelJuego().imprimirTablero();

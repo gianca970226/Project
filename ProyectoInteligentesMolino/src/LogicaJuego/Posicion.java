@@ -18,7 +18,7 @@ public class Posicion implements Serializable {
     //indice de la posicion, identificador dentro del tablero
     private int indicedePosicion;
     //me indica si la posicion esta siendo ocupada por una ficha de un jugador, o esta vacio
-    private Ficha jugadorOcupando;
+    private JugadorC jugadorOcupando;
     //me indica las posiciones que estan adyacentes
     //a esta posicion  y son a las cuales se pueden mover fichas
     private int[]indicesdePosicionesAdyacentes;
@@ -34,7 +34,7 @@ public class Posicion implements Serializable {
         this.indicedePosicion=posicion;
         //como la posicion esta vacia
         //le asignamos a jugadorOcupando como sin jugador
-        jugadorOcupando=Ficha.SIN_JUGADOR;
+        jugadorOcupando=JugadorC.NOAGENTE;
         
     }
     
@@ -52,14 +52,14 @@ public class Posicion implements Serializable {
     //metodo que me devuelve la ficha del 
     //jugador que esta ocupando la posicion
     //en caso de estar ocupada
-    public Ficha getJugadorOcupandola(){
+    public JugadorC getJugadorOcupandola(){
         return this.jugadorOcupando;
     }
     
     //metodo que me sirve
     //para cambiar la ficha del jugador que esta ocupando
     //esta ocupando esta posicion
-    public void setJugadorOcupando(Ficha jugador){
+    public void setJugadorOcupando(JugadorC jugador){
         //cambio el valor de ocupado a true
         this.estaOcupado=true;
         this.jugadorOcupando=jugador;
@@ -68,10 +68,10 @@ public class Posicion implements Serializable {
     //metodo que quita la ficha  de la posicion
     //y returna la ficha del jugador
     //que estuvo ocupando esta posicion
-    public Ficha QuitarFicha(){
+    public JugadorC QuitarFicha(){
         this.estaOcupado=false;
-        Ficha jugadorAnterior=this.jugadorOcupando;
-        this.jugadorOcupando=Ficha.SIN_JUGADOR;
+        JugadorC jugadorAnterior=this.jugadorOcupando;
+        this.jugadorOcupando=JugadorC.NOAGENTE;
         return jugadorAnterior;
     }
     

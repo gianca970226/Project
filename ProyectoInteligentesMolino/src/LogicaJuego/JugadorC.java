@@ -9,8 +9,8 @@ import java.io.Serializable;
 
 /**
  *
- * @author LENOVO
+ * @author Jorge Alejandro
  */
-public enum Ficha implements Serializable{
-    JUGADOR_1,JUGADOR_2,SIN_JUGADOR;
+public enum JugadorC implements Serializable{
+    AGENTE1,AGENTE2,NOAGENTE;
 }

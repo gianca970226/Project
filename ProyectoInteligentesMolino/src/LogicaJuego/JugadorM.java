@@ -8,38 +8,38 @@ import java.util.logging.Logger;
 public class JugadorM extends Jugador implements Serializable {
 
     private int profundidad;//maneja la profundidad del arbol de busqueda del algoritmo minimax
-    private Ficha oponente;//el tipo de ficha que maneja el enemigo
-    private Movimiento mejorMovimientoActual;//el mejor movimiento que se puede hacer actualmente
+    private JugadorC oponente;//el tipo de ficha que maneja el enemigo
+    private Jugada mejorMovimientoActual;//el mejor movimiento que se puede hacer actualmente
     public int mejorPuntaje = 0;//variables para guardar los mejores puntajes de un movimiento
     static final int maxPuntaje = 1000000;//maximo puntaje
 
     
     
     //contructor del jugador
-    public JugadorM(Ficha jugador, int numeroFichasPorJugador, int profundidad) throws Exception {
+    public JugadorM(JugadorC jugador, int numeroFichasPorJugador, int profundidad) throws Exception {
         super(jugador, numeroFichasPorJugador);
         if (profundidad < 1) {
             throw new Exception("" + getClass().getName() + " - profundidad invalidad para el jugador minimax");
         }
         this.profundidad = profundidad;
-        oponente = jugador == Ficha.JUGADOR_1 ? Ficha.JUGADOR_2 : Ficha.JUGADOR_1;
+        oponente = jugador == JugadorC.AGENTE1 ? JugadorC.AGENTE2 : JugadorC.AGENTE1;
     }
 
     
     
     //metodo con el cual se aplica un movimiento
-    private void aplicarMovimiento(Movimiento movimiento, Ficha jugador, Tablero tableroJuego, int faseJuego) {
+    private void aplicarMovimiento(Jugada movimiento, JugadorC jugador, Tablero tableroJuego, int faseJuego) {
         try {
-            Posicion posicion = tableroJuego.getPosicion(movimiento.indiceDestino);
+            Posicion posicion = tableroJuego.getPosicion(movimiento.destino);
             posicion.setJugadorOcupando(jugador);
-            if (faseJuego == Juego.FASE_COLOCAR) {
+            if (faseJuego == ReglasMolino.ETAPAPONER) {
                 tableroJuego.incremetarNumeroFichasJugador(jugador);
             } else {
-                tableroJuego.getPosicion(movimiento.indiceOrigen).QuitarFicha();
+                tableroJuego.getPosicion(movimiento.origen).QuitarFicha();
             }
             
-            if (movimiento.eliminarFichaEnIndice != -1) {
-                Posicion eliminar = tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice);
+            if (movimiento.borrar != -1) {
+                Posicion eliminar = tableroJuego.getPosicion(movimiento.borrar);
                 eliminar.QuitarFicha();
                 tableroJuego.decrementarNumeroFichasJugador(getFichaOponente(jugador));
             }
@@ -49,27 +49,27 @@ public class JugadorM extends Jugador implements Serializable {
     }
 
     //metodo que deshace un movimiento hecho
-    private void desHacerMovimiento(Movimiento movimiento, Ficha jugador, Tablero tableroJuego, int faseJuego) {
+    private void desHacerMovimiento(Jugada movimiento, JugadorC jugador, Tablero tableroJuego, int faseJuego) {
         
         try {
             //deshace el movimiento
-            Posicion posicion = tableroJuego.getPosicion(movimiento.indiceDestino);
+            Posicion posicion = tableroJuego.getPosicion(movimiento.destino);
             posicion.QuitarFicha();
             
             //si la fase es de colocar fichas simplementa decrementa la cantidad de
             //fichas del jugador
-            if (faseJuego == Juego.FASE_COLOCAR) {
+            if (faseJuego == ReglasMolino.ETAPAPONER) {
                 tableroJuego.decrementarNumeroFichasJugador(jugador);
             } else {
                 
                 //si la fase del juego es movimiento
                 //tiene que mover la ficha a la posicion original
-                tableroJuego.getPosicion(movimiento.indiceOrigen).setJugadorOcupando(jugador);
+                tableroJuego.getPosicion(movimiento.origen).setJugadorOcupando(jugador);
             }
             //si elimino una ficha en el movimiento tiene que volverla a poner
-            if (movimiento.eliminarFichaEnIndice != -1) {
-                Ficha opp = getFichaOponente(jugador);
-                tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice).setJugadorOcupando(opp);
+            if (movimiento.borrar != -1) {
+                JugadorC opp = getFichaOponente(jugador);
+                tableroJuego.getPosicion(movimiento.borrar).setJugadorOcupando(opp);
                 tableroJuego.incremetarNumeroFichasJugador(opp);
             }
         } catch (Exception ex) {
@@ -79,7 +79,7 @@ public class JugadorM extends Jugador implements Serializable {
 
     
     //metodo que me dice con que ficha juega e oponente
-    private Ficha getFichaOponente(Ficha jugador) {
+    private JugadorC getFichaOponente(JugadorC jugador) {
         if (jugador == fichaJugador) {
             return oponente;
         } else {
@@ -93,13 +93,13 @@ public class JugadorM extends Jugador implements Serializable {
         this.movimientosQueEliminan = 0;
 
         try {
-            List<Movimiento> movimientos = generarMovimientos(tableroJuego, this.fichaJugador, Juego.FASE_COLOCAR);
-            for (Movimiento movimiento : movimientos) {
-                this.aplicarMovimiento(movimiento, fichaJugador, tableroJuego, Juego.FASE_COLOCAR);
-                desHacerMovimiento(movimiento, fichaJugador, tableroJuego, Juego.FASE_COLOCAR);
+            List<Jugada> movimientos = generarMovimientos(tableroJuego, this.fichaJugador, ReglasMolino.ETAPAPONER);
+            for (Jugada movimiento : movimientos) {
+                this.aplicarMovimiento(movimiento, fichaJugador, tableroJuego, ReglasMolino.ETAPAPONER);
+                desHacerMovimiento(movimiento, fichaJugador, tableroJuego, ReglasMolino.ETAPAPONER);
             }
             this.mejorMovimientoActual = movimientos.get(new Random().nextInt(movimientos.size()));
-            return mejorMovimientoActual.indiceDestino;
+            return mejorMovimientoActual.destino;
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -108,11 +108,11 @@ public class JugadorM extends Jugador implements Serializable {
     }
 
     private int verificarJuegoTerminado(Tablero tableroJuego) {
-        if (tableroJuego.getNumeroPiezasColocadas() == (Juego.NUMERO_FICHAS_POR_JUGADOR * 2)) {
+        if (tableroJuego.getNumeroPiezasColocadas() == (ReglasMolino.NUMERO_FICHAS_POR_JUGADOR * 2)) {
             try {
-                if (tableroJuego.getNumeroFichasJugador(fichaJugador) <= Juego.NUMERO_MINIMO_FICHAS) {
+                if (tableroJuego.getNumeroFichasJugador(fichaJugador) <= ReglasMolino.NUMERO_MINIMO_FICHAS) {
                     return -maxPuntaje;
-                } else if (tableroJuego.getNumeroFichasJugador(oponente) <= Juego.NUMERO_MINIMO_FICHAS) {
+                } else if (tableroJuego.getNumeroFichasJugador(oponente) <= ReglasMolino.NUMERO_MINIMO_FICHAS) {
                     return maxPuntaje;
                 } else {
                     return 0;
@@ -124,14 +124,14 @@ public class JugadorM extends Jugador implements Serializable {
         return 0;
     }
 
-    public int getFaseJuego(Tablero tableroJuego, Ficha jugador) {
-        int faseJuego = Juego.FASE_COLOCAR;
+    public int getFaseJuego(Tablero tableroJuego, JugadorC jugador) {
+        int faseJuego = ReglasMolino.ETAPAPONER;
 
         try {
-            if (tableroJuego.getNumeroPiezasColocadas() == (Juego.NUMERO_FICHAS_POR_JUGADOR * 2)) {
-                faseJuego = Juego.FASE_MOVIMIENTO;
+            if (tableroJuego.getNumeroPiezasColocadas() == (ReglasMolino.NUMERO_FICHAS_POR_JUGADOR * 2)) {
+                faseJuego = ReglasMolino.ETAPAMOVIMIENTO;
                 if (tableroJuego.getNumeroFichasJugador(jugador) <= 3) {
-                    faseJuego = Juego.FASE_VUELO;
+                    faseJuego = ReglasMolino.FASE_VUELO;
                 }
             }
 
@@ -146,25 +146,25 @@ public class JugadorM extends Jugador implements Serializable {
     
     //metodo que genera unos posibles movimientos de un jugador
     //a partir de un estado del tablero y una fase del juego
-    private List<Movimiento> generarMovimientos(Tablero tableroJuego, Ficha jugador, int faseJuego) {
+    private List<Jugada> generarMovimientos(Tablero tableroJuego, JugadorC jugador, int faseJuego) {
         //creo la lista donde voy a guardar los movimientos posibles
-        List<Movimiento> movimientos = new ArrayList<>();
+        List<Jugada> movimientos = new ArrayList<>();
         //variables de posicion temporales para manejarlas
         Posicion posicion, posicionAdyacente;
         try {
             
             //si la fase del juego es de poner fichas
-            if (faseJuego == Juego.FASE_COLOCAR) {
+            if (faseJuego == ReglasMolino.ETAPAPONER) {
                 //itero por todas las posiciones del tablero
                 for (int i = 0; i < Tablero.NUM_POSICIONES_DEL_TABLERO; i++) {
                     //creo un movimiento
-                    Movimiento mov = new Movimiento(-7, -1, -1, Movimiento.COLOCAR);
+                    Jugada mov = new Jugada(-7, -1, -1, Jugada.PONER);
                     //si la posicion del tablero no esta ocupada
                     if (!(posicion = tableroJuego.getPosicion(i)).estaOcupado()) {
                         //hago a la posicion ocuparla por el jugador para mirar si se puede acercar a hacer molinos
                         posicion.setJugadorOcupando(jugador);
                         //pongo como indice destino de poner la ficha la posicion
-                        mov.indiceDestino = i;
+                        mov.destino = i;
                         //miro el movimiento pasa saber si al hacerlo
                         //se hace molino y añadir los movimientos
                         //con todas las posibles fichas a eliminar
@@ -177,7 +177,7 @@ public class JugadorM extends Jugador implements Serializable {
                 
             } 
             //si la fase de juego es la de mover fichas
-            else if (faseJuego == Juego.FASE_MOVIMIENTO) {
+            else if (faseJuego == ReglasMolino.ETAPAMOVIMIENTO) {
                 
                 
                 //itero por todas las posiciones del tablero
@@ -190,7 +190,7 @@ public class JugadorM extends Jugador implements Serializable {
                         //itero por las posiciones adyacentes de la posicion
                         for (int j = 0; j < posAdyacentes.length; j++) {
                             //por cada posicion adyacente creo un movimiento
-                            Movimiento mov = new Movimiento(i, -1, -1, Movimiento.MOVER);
+                            Jugada mov = new Jugada(i, -1, -1, Jugada.JUGADA);
                             //tomo la posicion adyacente en una variable temporal
                             posicionAdyacente = tableroJuego.getPosicion(posAdyacentes[j]);
                             //si la posicion adyacente no esta ocupada
@@ -198,7 +198,7 @@ public class JugadorM extends Jugador implements Serializable {
                                 //ocupo la posicion adyacente para hacer analisis de posibles molinos
                                 posicionAdyacente.setJugadorOcupando(jugador);
                                 //pongo como indice destino del movimiento a la posicion adyacente
-                                mov.indiceDestino = posAdyacentes[j];
+                                mov.destino = posAdyacentes[j];
                                 //quito la ficha de posicion para simular que hizo el movimiento
                                 posicion.QuitarFicha();
                                 //analiza el movimiento para saber si hace molino y añadir los movimientos
@@ -213,7 +213,7 @@ public class JugadorM extends Jugador implements Serializable {
                 }
             } 
             //si la fase del juego es la fase final
-            else if (faseJuego == Juego.FASE_VUELO) {
+            else if (faseJuego == ReglasMolino.FASE_VUELO) {
                 //variable en la que guardo los indices donde no hay fichas
                 List<Integer> espaciosLibres = new ArrayList<>();
                 //lista donde guardo las posiciones donde hay fichas del actual jugador
@@ -241,13 +241,13 @@ public class JugadorM extends Jugador implements Serializable {
                     //cada posicion vacia es una posicion valida para mover
                     for (Integer espacioLibre : espaciosLibres) {
                         //creo el movimiento que va desde la posicion origen y fase movimiento
-                        Movimiento mov = new Movimiento(posOrigen.getIndicePosicion(), -1, -1, Movimiento.MOVER);
+                        Jugada mov = new Jugada(posOrigen.getIndicePosicion(), -1, -1, Jugada.JUGADA);
                         //el espacio libre es una posicion destino
                         Posicion posDestino = tableroJuego.getPosicion(espacioLibre);
                         //ocupo la posicion destino para posterior analisis
                         posDestino.setJugadorOcupando(jugador);
                         //añado el espacio libre como el indice destino del movimiento
-                        mov.indiceDestino = espacioLibre;
+                        mov.destino = espacioLibre;
                         //miro el movimiento para analizar si con el hago molino
                         //y cuantas posibles movimientos para eliminar ficha tengo
                         mirarMovimiento(tableroJuego, jugador, movimientos, mov);
@@ -268,24 +268,24 @@ public class JugadorM extends Jugador implements Serializable {
         //cuando la profundidad es igual o menor a 3 el gasto generado por este metodo no vale la pena
         if (profundidad > 3) {
             //itero por todos los movimientos añadidos arriba
-            for (Movimiento movimiento : movimientos) {
+            for (Jugada movimiento : movimientos) {
                 
                 try {
-                    Ficha jugadorEliminado = Ficha.SIN_JUGADOR;
+                    JugadorC jugadorEliminado = JugadorC.NOAGENTE;
                     
-                    posicion = tableroJuego.getPosicion(movimiento.indiceDestino);
+                    posicion = tableroJuego.getPosicion(movimiento.destino);
                     
                     //intenta el movimiento para hacer un analisis del puntajes del movimiento
                     posicion.setJugadorOcupando(jugador);
                     
-                    if (faseJuego == Juego.FASE_COLOCAR) {
+                    if (faseJuego == ReglasMolino.ETAPAPONER) {
                         tableroJuego.incremetarNumeroFichasJugador(jugador);
                     } else {
-                        tableroJuego.getPosicion(movimiento.indiceOrigen).QuitarFicha();
+                        tableroJuego.getPosicion(movimiento.origen).QuitarFicha();
                     }
                     
-                    if (movimiento.eliminarFichaEnIndice != -1) {
-                        Posicion eliminada = tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice);
+                    if (movimiento.borrar != -1) {
+                        Posicion eliminada = tableroJuego.getPosicion(movimiento.borrar);
                         jugadorEliminado = eliminada.getJugadorOcupandola();
                         eliminada.QuitarFicha();
                         tableroJuego.decrementarNumeroFichasJugador(jugadorEliminado);
@@ -296,15 +296,15 @@ public class JugadorM extends Jugador implements Serializable {
                     //deshace todos los movimientos hechos para el analisis
                     posicion.QuitarFicha();
                     
-                    if (faseJuego == Juego.FASE_COLOCAR) {
+                    if (faseJuego == ReglasMolino.ETAPAPONER) {
                         tableroJuego.decrementarNumeroFichasJugador(jugador);
                     } else {
-                        tableroJuego.getPosicion(movimiento.indiceOrigen).setJugadorOcupando(jugador);
+                        tableroJuego.getPosicion(movimiento.origen).setJugadorOcupando(jugador);
                     }
                     
-                    if (movimiento.eliminarFichaEnIndice != -1) {
+                    if (movimiento.borrar != -1) {
                         
-                        tableroJuego.getPosicion(movimiento.eliminarFichaEnIndice).setJugadorOcupando(jugadorEliminado);
+                        tableroJuego.getPosicion(movimiento.borrar).setJugadorOcupando(jugadorEliminado);
                         tableroJuego.incremetarNumeroFichasJugador(jugadorEliminado);
                     }
                 } catch (Exception ex) {
@@ -322,19 +322,19 @@ public class JugadorM extends Jugador implements Serializable {
 
     @Override
     public int getIndiceParaQuitarFichaDeOponente(Tablero tableroJuego) {
-        return this.mejorMovimientoActual.eliminarFichaEnIndice;
+        return this.mejorMovimientoActual.borrar;
     }
 
     @Override
-    public Movimiento getFichaAMover(Tablero tableroJuego) {
+    public Jugada getFichaAMover(Tablero tableroJuego) {
         numeroMovimientos = 0;
         movimientosQueEliminan = 0;
 
         try {
-            List<Movimiento> movimientos = generarMovimientos(tableroJuego, this.fichaJugador, getFaseJuego(tableroJuego,fichaJugador));
-            for (Movimiento movimiento : movimientos) {
-                this.aplicarMovimiento(movimiento, fichaJugador, tableroJuego, Juego.FASE_COLOCAR);
-                desHacerMovimiento(movimiento, fichaJugador, tableroJuego, Juego.FASE_COLOCAR);
+            List<Jugada> movimientos = generarMovimientos(tableroJuego, this.fichaJugador, getFaseJuego(tableroJuego,fichaJugador));
+            for (Jugada movimiento : movimientos) {
+                this.aplicarMovimiento(movimiento, fichaJugador, tableroJuego, ReglasMolino.ETAPAPONER);
+                desHacerMovimiento(movimiento, fichaJugador, tableroJuego, ReglasMolino.ETAPAPONER);
             }
             this.mejorMovimientoActual = movimientos.get(new Random().nextInt(movimientos.size()));
             return mejorMovimientoActual;
@@ -352,7 +352,7 @@ public class JugadorM extends Jugador implements Serializable {
     //y me guarda los movimientos en los cuales puedo eliminar una
     //ficha del enemigo
     //y si no hace molino solo guarda el movimiento
-    private void mirarMovimiento(Tablero tableroJuego, Ficha jugador, List<Movimiento> movimientos, Movimiento movimiento) throws Exception {
+    private void mirarMovimiento(Tablero tableroJuego, JugadorC jugador, List<Jugada> jugadas, Jugada jugada) throws Exception {
         boolean hizoMolino = false;// variable para saber si el jugador con ese movimiento hace molino 
         
         //tenemos que iterar por todas las posibles formas de hacer molino
@@ -367,7 +367,7 @@ public class JugadorM extends Jugador implements Serializable {
                     fichasJugador++;
                 }
                 //si encontro la posicion donde va a poner ficha el movimiento lo marco como true
-                if (fila[j].getIndicePosicion() == movimiento.indiceDestino) {
+                if (fila[j].getIndicePosicion() == jugada.destino) {
                     fichaSelecionada = true;
                 }
             }
@@ -383,9 +383,9 @@ public class JugadorM extends Jugador implements Serializable {
                     Posicion pos = tableroJuego.getPosicion(j);
                     //miro si la posicion no esta siendo ocupada por una ficha del jugador actual y si
                     //la posicion no tiene ficha, en tal caso es una posicion donde puedo eliminar ficha
-                    if (pos.getJugadorOcupandola() != jugador && pos.getJugadorOcupandola() != Ficha.SIN_JUGADOR) {
-                        movimiento.eliminarFichaEnIndice = j;//añado el indice de la posicion como para eliminar ficha
-                        movimientos.add(movimiento);//añado el movimiento
+                    if (pos.getJugadorOcupandola() != jugador && pos.getJugadorOcupandola() != JugadorC.NOAGENTE) {
+                        jugada.borrar = j;//añado el indice de la posicion como para eliminar ficha
+                        jugadas.add(jugada);//añado el movimiento
                         this.movimientosQueEliminan++;//aumento e contador de los movimientos que eliminan
                     }
                     
@@ -397,7 +397,7 @@ public class JugadorM extends Jugador implements Serializable {
         
         //si no hizo molino añado el movimiento de lo contrario ya estaria añadido
         if (!hizoMolino) {
-            movimientos.add(movimiento);
+            jugadas.add(jugada);
         } else {
             hizoMolino = false;
         }

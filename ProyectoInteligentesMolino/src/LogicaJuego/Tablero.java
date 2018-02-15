@@ -71,9 +71,9 @@ public class Tablero implements Serializable {
     }
 
     //metodo con el cual pongo una ficha en una posicion de un jugador
-    public void setPosicionDeJugador(int indice, Ficha jugador) throws Exception {
+    public void setPosicionDeJugador(int indice, JugadorC jugador) throws Exception {
         if (indice >= 0 && indice < Tablero.NUM_POSICIONES_DEL_TABLERO) {
-            if (jugador == Ficha.JUGADOR_1 || jugador == Ficha.JUGADOR_2) {
+            if (jugador == JugadorC.AGENTE1 || jugador == JugadorC.AGENTE2) {
                 this.posicionesDelTablero[indice].setJugadorOcupando(jugador);
             } else {
                 throw new Exception("" + getClass().getName() + " - ficha invalida: " + jugador);
@@ -90,10 +90,10 @@ public class Tablero implements Serializable {
 
     //metodo que incremeta el numero de fichas de un jugador en el tablero
     //y ademas retorna este numero
-    public int incremetarNumeroFichasJugador(Ficha jugador) throws Exception {
-        if (jugador == Ficha.JUGADOR_1) {
+    public int incremetarNumeroFichasJugador(JugadorC jugador) throws Exception {
+        if (jugador == JugadorC.AGENTE1) {
             return ++this.numeroFichasJ1;
-        } else if (jugador == Ficha.JUGADOR_2) {
+        } else if (jugador == JugadorC.AGENTE2) {
             return ++this.numeroFichasJ2;
         } else {
             throw new Exception("" + getClass().getName() + " - Ficha de juegador invalida: " + jugador);
@@ -102,10 +102,10 @@ public class Tablero implements Serializable {
 
     //metodo que decrementa el numero de fichas de un jugador en el 
     //tablero y retorna este numero
-    public int decrementarNumeroFichasJugador(Ficha jugador) throws Exception {
-        if (jugador == Ficha.JUGADOR_1) {
+    public int decrementarNumeroFichasJugador(JugadorC jugador) throws Exception {
+        if (jugador == JugadorC.AGENTE1) {
             return --this.numeroFichasJ1;
-        } else if (jugador == Ficha.JUGADOR_2) {
+        } else if (jugador == JugadorC.AGENTE2) {
             return --this.numeroFichasJ2;
         } else {
             throw new Exception("" + getClass().getName() + " - Ficha de juegador invalida: " + jugador);
@@ -113,10 +113,10 @@ public class Tablero implements Serializable {
     }
 
     //metodo que devuelve el numero de fichas de un jugador en el tablero
-    public int getNumeroFichasJugador(Ficha jugador) throws Exception {
-        if (jugador == Ficha.JUGADOR_1) {
+    public int getNumeroFichasJugador(JugadorC jugador) throws Exception {
+        if (jugador == JugadorC.AGENTE1) {
             return this.numeroFichasJ1;
-        } else if (jugador == Ficha.JUGADOR_2) {
+        } else if (jugador == JugadorC.AGENTE2) {
             return this.numeroFichasJ2;
         } else {
             throw new Exception("" + getClass().getName() + " - Ficha de juegador invalida: " + jugador);
@@ -255,11 +255,11 @@ public class Tablero implements Serializable {
 
     private String mostrarPos(int i) {
         switch (this.posicionesDelTablero[i].getJugadorOcupandola()) {
-            case JUGADOR_1:
+            case AGENTE1:
                 return "X";
-            case JUGADOR_2:
+            case AGENTE2:
                 return "O";
-            case SIN_JUGADOR:
+            case NOAGENTE:
                 return "*";
             default:
                 return null;

@@ -9,7 +9,7 @@ public abstract class Jugador implements Serializable {
     protected String nombre;
     protected int numeroFichas;
     protected int numeroFichasEnTablero;
-    protected Ficha fichaJugador;
+    protected JugadorC fichaJugador;
     protected boolean poderTerminar;
     public int numeroMovimientos;
     public int movimientosQueEliminan = 0;
@@ -19,9 +19,9 @@ public abstract class Jugador implements Serializable {
         poderTerminar = false;
     }
 
-    protected Jugador(Ficha jugador, int numeroFichasPorJugador) {
+    protected Jugador(JugadorC jugador, int numeroFichasPorJugador) {
         this();
-        if (jugador != Ficha.JUGADOR_1 && jugador != Ficha.JUGADOR_2) {
+        if (jugador != JugadorC.AGENTE1 && jugador != JugadorC.AGENTE2) {
             try {
                 throw new Exception("" + getClass().getName() + " - ficha invalida del jugador: " + jugador);
             } catch (Exception ex) {
@@ -71,7 +71,7 @@ public abstract class Jugador implements Serializable {
         return numeroFichasEnTablero;
     }
 
-    public Ficha getFichaJugador() {
+    public JugadorC getFichaJugador() {
         return fichaJugador;
     }
 
@@ -84,5 +84,5 @@ public abstract class Jugador implements Serializable {
 
     public abstract int getIndiceParaQuitarFichaDeOponente(Tablero tableroJuego);
 
-    public abstract Movimiento getFichaAMover(Tablero tableroJuego);
+    public abstract Jugada getFichaAMover(Tablero tableroJuego);
 }

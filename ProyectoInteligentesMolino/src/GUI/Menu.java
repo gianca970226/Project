@@ -6,8 +6,8 @@
 package GUI;
 
 import Agentes.AgentePrincipal;
-import LogicaJuego.Ficha;
-import LogicaJuego.Juego;
+import LogicaJuego.JugadorC;
+import LogicaJuego.ReglasMolino;
 
 /**
  *
@@ -78,14 +78,14 @@ public class Menu extends javax.swing.JFrame {
 
     private void AvsaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AvsaActionPerformed
         argumentos= new Object[4];
-        argumentos[0]=Ficha.JUGADOR_1;
-        argumentos[1]=Juego.NUMERO_FICHAS_POR_JUGADOR;
+        argumentos[0]=JugadorC.AGENTE1;
+        argumentos[1]=ReglasMolino.NUMERO_FICHAS_POR_JUGADOR;
         argumentos[2]=4;
         argumentos[3]=true;
         agentePrincipal.initAgent("Jugador1", "Agentes.AgenteJugador", argumentos);
         Object args [] = new Object[4];
-        args[0]=Ficha.JUGADOR_2;
-        args[1]=Juego.NUMERO_FICHAS_POR_JUGADOR;
+        args[0]=JugadorC.AGENTE2;
+        args[1]=ReglasMolino.NUMERO_FICHAS_POR_JUGADOR;
         args[2]=4;
         args[3]=false;
         agentePrincipal.initAgent("Jugador2", "Agentes.AgenteJugador", args);

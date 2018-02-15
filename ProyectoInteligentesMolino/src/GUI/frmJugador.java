@@ -50,7 +50,7 @@ public class frmJugador extends javax.swing.JFrame {
 
     public void ActualizarTableroJugador() {
         for (int i = 0; i < tablero.length; i++) {
-            tablero[i].cambiarJugador(agenteJugador.getJuego().getTableroDelJuego().getPosicionesDelTablero()[i].getJugadorOcupandola());
+            tablero[i].cambiarJugador(agenteJugador.getReglasMolino().getTableroDelJuego().getPosicionesDelTablero()[i].getJugadorOcupandola());
         }
         repintar();
     }

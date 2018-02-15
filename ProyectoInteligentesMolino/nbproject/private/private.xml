@@ -3,19 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/GUI/Menu.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/Agentes/Agent_Master.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/GUI/PhysicalBoardPlayer.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/GUI/PhysicalBoard.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/GUI/PanelPlayer.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/Agentes/Run.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/LogicaJuego/Posicion.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/LogicaJuego/Tablero.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/Agentes/Agent_Manager.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/Agentes/Agent_Minimax.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/LogicaJuego/Main.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/GUI/Tablero.java</file>
-            <file>file:/D:/Semestre%20IX/Inteligentes%20I/ProyectoInteligentesMolino/src/Agentes/Agent_Player.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/LogicaJuego/JugadorIAMinimax.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/Agentes/Agent_Player.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/LogicaJuego/Posicion.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/GUI/Menu.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/GUI/PanelPlayer.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/GUI/PhysicalBoardPlayer.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/LogicaJuego/Juego.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/GUI/Panel.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/LogicaJuego/Ficha.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/Agentes/Agent_Master.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/Agentes/Agent_Minimax.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/LogicaJuego/Movimiento.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/LogicaJuego/Tablero.java</file>
+            <file>file:/C:/Users/JORGE_ALEJANDRO/Documents/NetBeansProjects/Project/ProyectoInteligentesMolino/src/LogicaJuego/Jugador.java</file>
         </group>
     </open-files>
 </project-private>
